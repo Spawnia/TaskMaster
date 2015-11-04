@@ -12,10 +12,13 @@ import android.view.View;
 import fh_ku.taskmaster.R;
 import fh_ku.taskmaster.adapters.DividerItemDecorator;
 import fh_ku.taskmaster.adapters.TaskAdapter;
+import fh_ku.taskmaster.database.SQLiteAdapter;
 
 public class TaskListActivity extends AppCompatActivity {
 
-    public static TaskAdapter adapter = new TaskAdapter();
+    public TaskAdapter taskAdapter;
+    public SQLiteAdapter sqLiteAdapter = new SQLiteAdapter(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,28 +27,56 @@ public class TaskListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //findViewById(R.id.task_update_button).setOnClickListener(task_update);
+
         RecyclerView rv = (RecyclerView) findViewById(R.id.task_list);
 
+        taskAdapter = new TaskAdapter(sqLiteAdapter.getAllData());
+
         rv.addItemDecoration(new DividerItemDecorator(this, DividerItemDecorator.VERTICAL_LIST));
-        rv.setAdapter(adapter);
+        rv.setAdapter(taskAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter.setOnUpdateTouchListener(new TaskAdapter.OnUpdateTouchListener() {
+
+        //Problem hier, woher kommt id? wie krieg ich da die id des jeweiligen tasks her?
+        taskAdapter.setOnUpdateTouchListener(new TaskAdapter.OnUpdateTouchListener() {
             @Override
             public void onUpdateTouch(int id) {
                 Intent intent = new Intent(TaskListActivity.this, TaskDetailActivity.class);
                 intent.putExtra("taskId", id);
                 TaskListActivity.this.startActivity(intent);
             }
-        });
+        } );
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TaskListActivity.this.startActivity(new Intent(TaskListActivity.this,TaskDetailActivity.class));
+                TaskListActivity.this.startActivity(new Intent(TaskListActivity.this, TaskDetailActivity.class));
             }
         });
+    }
+    /*
+    final View.OnClickListener task_update = new View.OnClickListener() {
+        @Override
+        public void onClick(final View v) {
+            Intent intent = new Intent(TaskListActivity.this, TaskDetailActivity.class);
+            intent.putExtra("taskId", v.getId());
+            TaskListActivity.this.startActivity(intent);
+
+        }
+    };
+    */
+
+
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //taskAdapter = new TaskAdapter(sqLiteAdapter.getAllData());
+        taskAdapter.setTasks(sqLiteAdapter.getAllData());
     }
 
 }

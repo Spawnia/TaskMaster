@@ -15,13 +15,17 @@ import fh_ku.taskmaster.models.Task;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
-    public static List<Task> tasks = new ArrayList<>();
+    public List<Task> tasks;
 
     private OnUpdateTouchListener onUpdateTouchListener;
 
+    public TaskAdapter(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     public static interface OnUpdateTouchListener {
         public void onUpdateTouch(int id);
-    };
+    }
 
     public void setOnUpdateTouchListener (OnUpdateTouchListener onEditTouchListener) {
         this.onUpdateTouchListener = onEditTouchListener;
@@ -40,7 +44,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             dueDate = (TextView) itemView.findViewById(R.id.task_due_date);
             updateTask = (ImageButton) itemView.findViewById(R.id.task_update_button);
         }
-    };
+    }
+
+    public void setTasks(List<Task> tasks){
+        this.tasks = tasks;
+    }
 
     public void addTask(Task task) {
         tasks.add(task);
@@ -57,12 +65,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         tasks.set(task.getId(),task);
         notifyItemChanged(task.getId());
     }
+    public void taskUpdate(View view){
+        int i = view.getId();
+    }
 
     @Override
     public TaskAdapter.TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_list_item,parent,false);
         return new TaskAdapter.TaskViewHolder(itemView);
     }
+
+
 
     @Override
     public void onBindViewHolder(TaskAdapter.TaskViewHolder viewHolder, final int position) {

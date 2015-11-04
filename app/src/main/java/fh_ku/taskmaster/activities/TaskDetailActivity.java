@@ -13,11 +13,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import fh_ku.taskmaster.R;
+import fh_ku.taskmaster.adapters.TaskAdapter;
+import fh_ku.taskmaster.database.SQLiteAdapter;
 import fh_ku.taskmaster.models.Task;
 import fh_ku.taskmaster.pickers.DatePicker;
 import fh_ku.taskmaster.pickers.TimePicker;
 
 public class TaskDetailActivity extends AppCompatActivity {
+
+    //three lines outcommented
+    public SQLiteAdapter sqLiteAdapter = new SQLiteAdapter(this);
 
     private static String TAG = TaskDetailActivity.class.getName();
     private Task task;
@@ -64,9 +69,10 @@ public class TaskDetailActivity extends AppCompatActivity {
     public void initTask() {
         Intent startIntent = getIntent();
         int taskId = startIntent.getIntExtra("taskId", -1);
-
+        //geht immer in create mode
         if (taskId >= 0) { // edit mode
-            this.task = TaskListActivity.adapter.getTask(taskId);
+            this.task  = sqLiteAdapter.getTask(taskId);
+            //this.task = TaskListActivity.taskAdapter.getTask(taskId);
         } else { // create mode
             this.task = new Task();
         }
@@ -137,9 +143,12 @@ public class TaskDetailActivity extends AppCompatActivity {
             this.task.setName(this.nameInput.getText().toString());
 
             if (this.task.getId() >= 0) {
-                TaskListActivity.adapter.updateTask(this.task);
+                sqLiteAdapter.updateTask(task);
+              // TaskListActivity.taskAdapter.updateTask(this.task);
             } else {
-                TaskListActivity.adapter.addTask(this.task);
+
+                sqLiteAdapter.addTask(task);
+             //   TaskListActivity.taskAdapter.addTask(this.task);
             }
 
             this.startActivity(new Intent(this, TaskListActivity.class));
