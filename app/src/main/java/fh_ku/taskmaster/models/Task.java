@@ -14,7 +14,7 @@ public class Task {
     protected Date created;
 
     public Task() {
-        this.id       = 0;
+        this.id       = -1;
         this.name     = "";
         this.priority = 1;
         this.dueDate  = new Date();

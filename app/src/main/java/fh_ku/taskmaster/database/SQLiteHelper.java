@@ -29,9 +29,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_BOOK_TABLE = "CREATE TABLE tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, priority INTEGER, dueDate TEXT, created TEXT)";
+        String CREATE_TASK_TABLE = "CREATE TABLE tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, priority INTEGER, dueDate TEXT, created TEXT)";
 
-        db.execSQL(CREATE_BOOK_TABLE);
+        db.execSQL(CREATE_TASK_TABLE);
     }
 
     @Override

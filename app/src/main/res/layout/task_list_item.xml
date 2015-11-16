@@ -26,6 +26,13 @@
         android:id="@+id/task_update_button"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true" />
+    <CheckBox
+        android:layout_toLeftOf="@+id/task_update_button"
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_centerVertical="true" />
 
 
 </RelativeLayout>

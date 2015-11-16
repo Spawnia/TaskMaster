@@ -58,8 +58,8 @@ public class SQLiteAdapter {
         Task task = new Task();
 
         SQLiteDatabase db = helper.getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_TASKS, COLUMNS, " id = ?", null, null, null, null);
+        String[] whereClause = {String.valueOf(id + 1)};
+        Cursor cursor = db.query(TABLE_TASKS, COLUMNS, "id = ?", whereClause, null, null, null);
 
         if (cursor.moveToFirst()) {
 
@@ -99,6 +99,8 @@ public class SQLiteAdapter {
             task.setDueDate(cursorDueDate);
             task.setCreated(cursorCreate);
         }
+
+
         return task;
     }
 

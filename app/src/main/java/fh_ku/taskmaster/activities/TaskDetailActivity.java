@@ -68,12 +68,12 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     public void initTask() {
         Intent startIntent = getIntent();
-        int taskId = startIntent.getIntExtra("taskId", -1);
+        int taskId = startIntent.getIntExtra("taskId",-1);
         //geht immer in create mode
         if (taskId >= 0) { // edit mode
-            this.task  = sqLiteAdapter.getTask(taskId);
+            task = sqLiteAdapter.getTask(taskId);
             //this.task = TaskListActivity.taskAdapter.getTask(taskId);
-        } else { // create mode
+        }else{
             this.task = new Task();
         }
     }
@@ -146,7 +146,6 @@ public class TaskDetailActivity extends AppCompatActivity {
                 sqLiteAdapter.updateTask(task);
               // TaskListActivity.taskAdapter.updateTask(this.task);
             } else {
-
                 sqLiteAdapter.addTask(task);
              //   TaskListActivity.taskAdapter.addTask(this.task);
             }
