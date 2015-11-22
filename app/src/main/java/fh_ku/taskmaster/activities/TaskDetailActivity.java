@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +17,15 @@ import fh_ku.taskmaster.R;
 import fh_ku.taskmaster.models.Task;
 import fh_ku.taskmaster.pickers.DatePicker;
 import fh_ku.taskmaster.pickers.TimePicker;
+import fh_ku.taskmaster.repositories.DatabaseHelper;
+import fh_ku.taskmaster.repositories.TaskRepository;
 
 public class TaskDetailActivity extends AppCompatActivity {
 
     private static String TAG = TaskDetailActivity.class.getName();
     private Task task;
     private String[] priorities;
+    private TaskRepository taskRepository;
 
     private EditText nameInput;
     private Spinner  priorityInput;
@@ -55,7 +59,8 @@ public class TaskDetailActivity extends AppCompatActivity {
     }
 
     public void renderTask() {
-        nameInput.setText(task.getName());
+        Log.i("TASK DETAILS", "Task closed: " + this.task.isClosed());
+        nameInput.setText(this.task.getName());
         dateInput.setText(Task.formatDate(this,task.getDueDate()));
         timeInput.setText(Task.formatTime(this,task.getDueDate()));
         priorityInput.setSelection(task.getPriority());
@@ -66,7 +71,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         int taskId = startIntent.getIntExtra("taskId", -1);
 
         if (taskId >= 0) { // edit mode
-            this.task = TaskListActivity.adapter.getTask(taskId);
+            this.task = this.taskRepository.getTask(taskId);
         } else { // create mode
             this.task = new Task();
         }
@@ -81,6 +86,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        this.taskRepository = new TaskRepository(new DatabaseHelper(this));
         this.priorities = getResources().getStringArray(R.array.task_priorities);
         this.initTask();
 
@@ -137,9 +143,9 @@ public class TaskDetailActivity extends AppCompatActivity {
             this.task.setName(this.nameInput.getText().toString());
 
             if (this.task.getId() >= 0) {
-                TaskListActivity.adapter.updateTask(this.task);
+                this.taskRepository.updateTask(this.task);
             } else {
-                TaskListActivity.adapter.addTask(this.task);
+                this.taskRepository.addTask(this.task);
             }
 
             this.startActivity(new Intent(this, TaskListActivity.class));

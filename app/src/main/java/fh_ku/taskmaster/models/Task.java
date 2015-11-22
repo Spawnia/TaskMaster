@@ -3,6 +3,7 @@ package fh_ku.taskmaster.models;
 import android.content.Context;
 import android.text.format.DateFormat;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Task {
@@ -12,21 +13,38 @@ public class Task {
     protected int priority;
     protected Date dueDate;
     protected Date created;
+    protected boolean closed;
 
     public Task() {
         this.id       = -1;
         this.name     = "";
         this.priority = 1;
         this.dueDate  = new Date();
-        this.created  = new Date();
+        this.created  = null;
+        this.closed = false;
+    }
+
+    public boolean isClosed() {
+        return this.closed;
+    }
+
+    public Task setClosed(boolean closed) {
+        this.closed = closed;
+        return this;
+    }
+
+    public Task setClosed(int closed) {
+        this.closed = closed > 0 ? true : false;
+        return this;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public Task setId(int id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
@@ -75,6 +93,12 @@ public class Task {
 
     public static String formatDateTime (Context context, Date date) {
         return formatDate(context,date) + " " + formatTime(context,date);
+    }
+
+    public static Date TimestampToDate (long timestamp) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(timestamp);
+        return cal.getTime();
     }
 
 }

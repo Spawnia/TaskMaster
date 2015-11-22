@@ -12,10 +12,12 @@ import android.view.View;
 import fh_ku.taskmaster.R;
 import fh_ku.taskmaster.adapters.DividerItemDecorator;
 import fh_ku.taskmaster.adapters.TaskAdapter;
+import fh_ku.taskmaster.repositories.DatabaseHelper;
+import fh_ku.taskmaster.repositories.TaskRepository;
 
 public class TaskListActivity extends AppCompatActivity {
 
-    public static TaskAdapter adapter = new TaskAdapter();
+    public static TaskAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,8 @@ public class TaskListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.task_list);
+        TaskRepository taskRepository = new TaskRepository(new DatabaseHelper(this));
+        this.adapter = new TaskAdapter(taskRepository);
 
         rv.addItemDecoration(new DividerItemDecorator(this, DividerItemDecorator.VERTICAL_LIST));
         rv.setAdapter(adapter);
@@ -48,4 +52,9 @@ public class TaskListActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.init();
+    }
 }
