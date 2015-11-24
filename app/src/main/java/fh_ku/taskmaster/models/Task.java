@@ -12,6 +12,7 @@ public class Task {
     protected int priority;
     protected Date dueDate;
     protected Date created;
+    protected int done;
 
     public Task() {
         this.id       = -1;
@@ -19,6 +20,7 @@ public class Task {
         this.priority = 1;
         this.dueDate  = new Date();
         this.created  = new Date();
+        this.done = 0;
     }
 
     public int getId() {

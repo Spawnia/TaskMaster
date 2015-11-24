@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -35,6 +36,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         public TextView name;
         public TextView dueDate;
+        public CheckBox checkbox;
+
         public ImageButton updateTask;
 
         public TaskViewHolder(View itemView) {
@@ -42,6 +45,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
             name    = (TextView) itemView.findViewById(R.id.task_name);
             dueDate = (TextView) itemView.findViewById(R.id.task_due_date);
+            checkbox = (CheckBox) itemView.findViewById(R.id.checkbox);
             updateTask = (ImageButton) itemView.findViewById(R.id.task_update_button);
         }
     }
@@ -49,7 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public void setTasks(List<Task> tasks){
         this.tasks = tasks;
     }
-
+    /*
     public void addTask(Task task) {
         tasks.add(task);
         notifyItemInserted(tasks.size() - 1);
@@ -68,7 +72,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public void taskUpdate(View view){
         int i = view.getId();
     }
-
+    */
     @Override
     public TaskAdapter.TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_list_item,parent,false);
@@ -80,7 +84,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(TaskAdapter.TaskViewHolder viewHolder, final int position) {
         viewHolder.name.setText(tasks.get(position).getName());
-        viewHolder.dueDate.setText(Task.formatDateTime(viewHolder.dueDate.getContext(),tasks.get(position).getDueDate()));
+        viewHolder.dueDate.setText(Task.formatDateTime(viewHolder.dueDate.getContext(), tasks.get(position).getDueDate()));
         viewHolder.updateTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

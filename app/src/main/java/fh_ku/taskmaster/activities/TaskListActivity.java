@@ -56,6 +56,7 @@ public class TaskListActivity extends AppCompatActivity {
                 TaskListActivity.this.startActivity(new Intent(TaskListActivity.this, TaskDetailActivity.class));
             }
         });
+
     }
     /*
     final View.OnClickListener task_update = new View.OnClickListener() {
