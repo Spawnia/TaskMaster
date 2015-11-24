@@ -7,13 +7,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/task_closed"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true" />
+
     <TextView
         android:id="@+id/task_name"
+        android:layout_toRightOf="@+id/task_closed"
+        android:text="Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/task_due_date"
+        android:layout_toRightOf="@+id/task_closed"
+        android:text="Test 2"
         android:layout_below="@+id/task_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -33,6 +44,5 @@
         android:layout_height="wrap_content"
 
         android:layout_centerVertical="true" />
-
 
 </RelativeLayout>

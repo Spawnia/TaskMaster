@@ -12,6 +12,7 @@ import android.view.View;
 import fh_ku.taskmaster.R;
 import fh_ku.taskmaster.adapters.DividerItemDecorator;
 import fh_ku.taskmaster.adapters.TaskAdapter;
+<<<<<<< HEAD
 import fh_ku.taskmaster.database.SQLiteAdapter;
 
 public class TaskListActivity extends AppCompatActivity {
@@ -19,6 +20,14 @@ public class TaskListActivity extends AppCompatActivity {
     public TaskAdapter taskAdapter;
     public SQLiteAdapter sqLiteAdapter = new SQLiteAdapter(this);
 
+=======
+import fh_ku.taskmaster.repositories.DatabaseHelper;
+import fh_ku.taskmaster.repositories.TaskRepository;
+
+public class TaskListActivity extends AppCompatActivity {
+
+    public static TaskAdapter adapter;
+>>>>>>> stefanhuber/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,8 @@ public class TaskListActivity extends AppCompatActivity {
         //findViewById(R.id.task_update_button).setOnClickListener(task_update);
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.task_list);
+        TaskRepository taskRepository = new TaskRepository(new DatabaseHelper(this));
+        this.adapter = new TaskAdapter(taskRepository);
 
         taskAdapter = new TaskAdapter(sqLiteAdapter.getAllData());
 
@@ -80,4 +91,9 @@ public class TaskListActivity extends AppCompatActivity {
         taskAdapter.setTasks(sqLiteAdapter.getAllData());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.init();
+    }
 }
