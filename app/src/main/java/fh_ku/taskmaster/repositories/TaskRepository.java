@@ -10,14 +10,15 @@ import fh_ku.taskmaster.models.Task;
 
 public class TaskRepository {
 
-    public static final String TABLE_TASK = "task";
+    public static final String TABLE_TASKS = "tasks";
 
-    public static final String COLUMN_ID = "id";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_PRIORITY = "priority";
-    public static final String COLUMN_CLOSED = "closed";
-    public static final String COLUMN_DUE_DATE = "due_date";
-    public static final String COLUMN_CREATED = "created";
+    public static final String COLUMN_ID = "TaskID";
+    public static final String COLUMN_NAME = "Name";
+    public static final String COLUMN_PRIORITY = "Priority";
+    public static final String COLUMN_DUE_DATE = "DueDate";
+    public static final String COLUMN_CREATED = "Created";
+    public static final String COLUMN_TAG = "Tag";
+    public static final String COLUMN_CLOSED = "Closed";
 
     private DatabaseHelper dbHelper;
 
@@ -31,26 +32,31 @@ public class TaskRepository {
 
     public Task taskAtCursorPosition(Cursor cursor, int position) {
         if (cursor != null && cursor.moveToPosition(position)) {
-            Log.i("TASK REPOSITORY","Task found at position: " + position);
+            Log.i("TASK REPOSITORY", "Task found at position: " + position);
             return new Task()
-                .setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)))
-                .setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)))
-                .setPriority(cursor.getInt(cursor.getColumnIndex(COLUMN_PRIORITY)))
-                .setDueDate(Task.TimestampToDate(cursor.getLong(cursor.getColumnIndex(COLUMN_DUE_DATE))))
-                .setCreated(Task.TimestampToDate(cursor.getLong(cursor.getColumnIndex(COLUMN_CREATED))))
-                .setClosed(cursor.getInt(cursor.getColumnIndex(COLUMN_CLOSED)));
+                    .setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)))
+                    .setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)))
+                    .setPriority(cursor.getInt(cursor.getColumnIndex(COLUMN_PRIORITY)))
+                    .setDueDate(Task.TimestampToDate(cursor.getLong(cursor.getColumnIndex(COLUMN_DUE_DATE))))
+                    .setCreated(Task.TimestampToDate(cursor.getLong(cursor.getColumnIndex(COLUMN_CREATED))))
+                    .setTag(cursor.getString(cursor.getColumnIndex(COLUMN_TAG)))
+                    .setClosed(cursor.getInt(cursor.getColumnIndex(COLUMN_CLOSED)));
         }
 
-        Log.i("TASK REPOSITORY","No Task at position " + position + " found.");
+        Log.i("TASK REPOSITORY", "No Task at position " + position + " found.");
         return null;
     }
 
     public Cursor queryAllTasks() {
-        return this.dbHelper.getReadableDatabase().query(TABLE_TASK,null,null,null,null,null,null);
+        return this.dbHelper.getReadableDatabase().query(TABLE_TASKS,null,null,null,null,null,null);
+    }
+
+    public Cursor queryTasksByTag(String tag) {
+        return this.dbHelper.getReadableDatabase().query(TABLE_TASKS,null,COLUMN_TAG+"=?",new String[]{tag},null,null,null);
     }
 
     public Task getTask(int id) {
-        Cursor cursor = dbHelper.getReadableDatabase().query(TABLE_TASK,null,COLUMN_ID+"=?",new String[]{String.valueOf(id)},null,null,null);
+        Cursor cursor = dbHelper.getReadableDatabase().query(TABLE_TASKS,null,COLUMN_ID+"=?",new String[]{String.valueOf(id)},null,null,null);
         return this.taskAtCursorPosition(cursor, 0);
     }
 
@@ -60,17 +66,18 @@ public class TaskRepository {
         cvs.put(COLUMN_PRIORITY,task.getPriority());
         cvs.put(COLUMN_DUE_DATE,task.getDueDate().getTime());
         cvs.put(COLUMN_CREATED,task.getCreated() == null ? Calendar.getInstance().getTimeInMillis() : task.getCreated().getTime());
+        cvs.put(COLUMN_TAG,task.getTag());
         cvs.put(COLUMN_CLOSED,task.isClosed() ? 1 : 0);
         return cvs;
     }
 
     public Task addTask(Task task) {
-        task.setId((int) dbHelper.getWritableDatabase().insert(TABLE_TASK,null,taskToContentValues(task)));
+        task.setId((int) dbHelper.getWritableDatabase().insert(TABLE_TASKS,null,taskToContentValues(task)));
         return task;
     }
 
     public Task updateTask(Task task) {
-        dbHelper.getWritableDatabase().update(TABLE_TASK,taskToContentValues(task),COLUMN_ID+"=?",new String[]{String.valueOf(task.getId())});
+        dbHelper.getWritableDatabase().update(TABLE_TASKS,taskToContentValues(task),COLUMN_ID+"=?",new String[]{String.valueOf(task.getId())});
         return task;
     }
 

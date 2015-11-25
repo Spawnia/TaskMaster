@@ -13,6 +13,7 @@ public class Task {
     protected int priority;
     protected Date dueDate;
     protected Date created;
+    protected String tag;
     protected boolean closed;
 
     public Task() {
@@ -21,7 +22,17 @@ public class Task {
         this.priority = 1;
         this.dueDate  = new Date();
         this.created  = null;
+        this.tag = "";
         this.closed = false;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public Task setTag(String tag) {
+        this.tag = tag;
+        return this;
     }
 
     public boolean isClosed() {
