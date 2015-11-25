@@ -21,6 +21,7 @@ import fh_ku.taskmaster.repositories.DatabaseHelper;
 import fh_ku.taskmaster.repositories.TaskRepository;
 
 public class TaskDetailActivity extends AppCompatActivity {
+    //tets
 
     private static String TAG = TaskDetailActivity.class.getName();
     private Task task;
