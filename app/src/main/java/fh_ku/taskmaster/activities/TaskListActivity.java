@@ -21,6 +21,7 @@ public class TaskListActivity extends AppCompatActivity {
 
     public static TaskAdapter taskAdapter;
     public static TagAdapter tagAdapter;
+    public static RecyclerView taskRV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class TaskListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView taskRV = (RecyclerView) findViewById(R.id.task_list);
+        taskRV = (RecyclerView) findViewById(R.id.task_list);
         TaskRepository taskRepository = new TaskRepository(new DatabaseHelper(this));
         this.taskAdapter = new TaskAdapter(taskRepository);
 
@@ -61,6 +62,12 @@ public class TaskListActivity extends AppCompatActivity {
                 TaskListActivity.this.startActivity(new Intent(TaskListActivity.this,TaskDetailActivity.class));
             }
         });
+    }
+
+    public static void filterByTag(String tag){
+        taskAdapter.initFiltered(tag);
+        taskRV.setAdapter(taskAdapter); 
+
     }
 
     @Override

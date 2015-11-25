@@ -10,9 +10,6 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fh_ku.taskmaster.R;
 import fh_ku.taskmaster.models.Task;
 import fh_ku.taskmaster.repositories.TaskRepository;
@@ -29,6 +26,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public void init() {
         this.cursor = this.taskRepository.queryAllTasks();
+    }
+
+    public void initFiltered(String tag) {
+        this.cursor = this.taskRepository.queryTasksByTag(tag);
     }
 
     public static interface OnUpdateTouchListener {

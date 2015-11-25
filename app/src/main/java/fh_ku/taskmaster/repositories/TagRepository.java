@@ -52,7 +52,7 @@ public class TagRepository {
         cvs.put(COLUMN_TAG, tag);
         return cvs;
     }
-
+    //könnte zwei parameter entgegennehmen und alten tag evtl. löschen, wenn keine tasks mehr über sind
     public void addTag(String tag){
         Cursor cursor = dbHelper.getReadableDatabase().query(TABLE_TAGS,null,COLUMN_TAG+"=?",new String[]{tag},null,null,null);
         if(!cursor.moveToFirst()){

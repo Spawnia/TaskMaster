@@ -18,6 +18,7 @@ import fh_ku.taskmaster.models.Task;
 import fh_ku.taskmaster.pickers.DatePicker;
 import fh_ku.taskmaster.pickers.TimePicker;
 import fh_ku.taskmaster.repositories.DatabaseHelper;
+import fh_ku.taskmaster.repositories.TagRepository;
 import fh_ku.taskmaster.repositories.TaskRepository;
 
 public class TaskDetailActivity extends AppCompatActivity {
@@ -27,8 +28,10 @@ public class TaskDetailActivity extends AppCompatActivity {
     private Task task;
     private String[] priorities;
     private TaskRepository taskRepository;
+    private TagRepository tagRepository;
 
     private EditText nameInput;
+    private EditText tagInput;
     private Spinner  priorityInput;
     private TextView dateInput;
     private TextView timeInput;
@@ -62,6 +65,7 @@ public class TaskDetailActivity extends AppCompatActivity {
     public void renderTask() {
         Log.i("TASK DETAILS", "Task closed: " + this.task.isClosed());
         nameInput.setText(this.task.getName());
+        tagInput.setText(this.task.getTag());
         dateInput.setText(Task.formatDate(this,task.getDueDate()));
         timeInput.setText(Task.formatTime(this,task.getDueDate()));
         priorityInput.setSelection(task.getPriority());
@@ -88,10 +92,12 @@ public class TaskDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         this.taskRepository = new TaskRepository(new DatabaseHelper(this));
+        this.tagRepository = new TagRepository(new DatabaseHelper(this));
         this.priorities = getResources().getStringArray(R.array.task_priorities);
         this.initTask();
 
         nameInput = (EditText) findViewById(R.id.task_input_name);
+        tagInput  = (EditText) findViewById(R.id.task_input_tag);
         dateInput = (TextView) findViewById(R.id.task_input_date);
         timeInput = (TextView) findViewById(R.id.task_input_time);
         priorityInput = (Spinner) findViewById(R.id.task_input_priority);
@@ -141,7 +147,13 @@ public class TaskDetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_save) {
+            //speichert bei veränderten tag neuen tag ein, löscht aber nicht alten
+            if(!this.task.getTag().equals(this.tagInput.getText().toString())){
+                this.tagRepository.addTag(this.tagInput.getText().toString());
+            }
             this.task.setName(this.nameInput.getText().toString());
+            this.task.setTag(this.tagInput.getText().toString());
+
 
             if (this.task.getId() >= 0) {
                 this.taskRepository.updateTask(this.task);

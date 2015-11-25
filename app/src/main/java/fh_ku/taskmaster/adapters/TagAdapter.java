@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 
 import fh_ku.taskmaster.R;
+import fh_ku.taskmaster.activities.TaskListActivity;
 import fh_ku.taskmaster.models.Tag;
 import fh_ku.taskmaster.repositories.TagRepository;
 
@@ -53,7 +54,8 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder>{
         viewHolder.tag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Log.i("TAG ADAPTER", "Tag is clicked");
+                TaskListActivity.filterByTag(tag.getTag());
+                Log.i("TAG ADAPTER", tag.getTag()+"Tag is clicked");
             }
         });
     }
